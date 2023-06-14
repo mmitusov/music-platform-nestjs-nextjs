@@ -6,9 +6,9 @@
 //Для этого в поле controllers, создаем массив, где через запятую перечислим все контроллеры которые будут в нашем приложении
 
 import { Module } from "@nestjs/common";
-import { appController } from "./app.controller";
 
 @Module({
-    controllers: [appController]
+    controllers: [],
+    providers: []
 })
 export class AppModule {}
