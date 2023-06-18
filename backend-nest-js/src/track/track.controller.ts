@@ -1,16 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { TrackService } from "./track.service";
 import { CreateTrackDto } from "./dto/create-track.dto";
 import { ObjectId } from "mongoose";
 import { AddCommentDto } from "./dto/add-comment.dto";
+import { FileFieldsInterceptor } from "@nestjs/platform-express";
 
 @Controller('/tracks')
 export class TrackController {
     constructor(private trackService: TrackService) {}
 
     @Post()
-    create(@Body() createTrackDto: CreateTrackDto, picture, audio) { //CreateTrackDto - type for TypeScript
-        return this.trackService.create(createTrackDto)
+    @UseInterceptors(FileFieldsInterceptor([ //Для работы с файлаии
+        { name: 'picture', maxCount: 1 }, //Задаем, что ждем 1 файл "picture"
+        { name: 'audio', maxCount: 1 }, //Задаем, что ждем 1 файл "audio"
+    ]))
+    create(@UploadedFiles() files, @Body() createTrackDto: CreateTrackDto) { //CreateTrackDto - type for TypeScript, @UploadedFiles() - для работы с файлами
+        const {picture, audio} = files;
+        return this.trackService.create(createTrackDto, picture[0], audio[0]) //picture, audio - приходят в форме массивов, поэтому берем по первому индексу
     }
 
     @Get()

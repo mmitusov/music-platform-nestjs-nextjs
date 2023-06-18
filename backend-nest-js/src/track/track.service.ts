@@ -13,7 +13,7 @@ export class TrackService {
         @InjectModel(Comment.name) private commentModel: Model<Comment>,
     ) {}
 
-    async create(createTrackDto: CreateTrackDto): Promise<Track> { //CreateTrackDto - type for TypeScript
+    async create(createTrackDto: CreateTrackDto, picture, audio): Promise<Track> { //CreateTrackDto - type for TypeScript
         const createdTrack = await this.trackModel.create({...createTrackDto, listened: 0});
         return createdTrack;
     }
