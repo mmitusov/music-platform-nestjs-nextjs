@@ -5,18 +5,20 @@ import { Track } from "./schemas/track.schemas";
 import { Comment } from "./schemas/comment.schemas";
 import { CreateTrackDto } from "./dto/create-track.dto";
 import { AddCommentDto } from "./dto/add-comment.dto";
-import { FileService } from "src/file/file.service";
+import { FileService, FileType } from "../file/file.service";
 
 @Injectable()
 export class TrackService {
     constructor(
         @InjectModel(Track.name) private trackModel: Model<Track>,
         @InjectModel(Comment.name) private commentModel: Model<Comment>,
-        private fileService: FileService
+        private fileService: FileService //Сервис из другого FileModule модуля
     ) {}
 
     async create(createTrackDto: CreateTrackDto, picture, audio): Promise<Track> { //CreateTrackDto - type for TypeScript
-        const createdTrack = await this.trackModel.create({...createTrackDto, listened: 0});
+        const audioPath = this.fileService.createFile(FileType.audio, audio);
+        const picturePath = this.fileService.createFile(FileType.picture, picture);
+        const createdTrack = await this.trackModel.create({...createTrackDto, listened: 0, picture: picturePath, audio: audioPath});
         return createdTrack;
     }
 

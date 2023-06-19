@@ -10,18 +10,26 @@
 
 //В MongooseModule указываем ЮРЛ после создания кластера
 
+//ServeStaticModule - Скачаный пакет для раздачи статики клиенту
+//Указываем где у нас находится статика - {rootPath: path.resolve(__dirname, 'static')}
+//Теперь сервер может раздавать файлы которые находятся внутри папки 'static'
+//Воложенные папки и название файла берем из БД при запросе от клиента - image/unique_name.jpg
+
 import { Module } from "@nestjs/common";
 import { TrackModule } from "./track/track.module";
+import { FileModule } from "./file/file.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from '@nestjs/config';
-import { FileModule } from "./file/file.module";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import * as path from "path";
 
 @Module({
     imports: [
         TrackModule,
         FileModule,
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(`mongodb+srv://Max:${process.env.MONGO_DB_PASSWORD}@music-platform.cyuu8cm.mongodb.net/?retryWrites=true&w=majority`)
+        MongooseModule.forRoot(`mongodb+srv://Max:${process.env.MONGO_DB_PASSWORD}@music-platform.cyuu8cm.mongodb.net/?retryWrites=true&w=majority`),
+        ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, 'static')}) //Заменили изначальную функцию join, на path.resolve
     ]
 })
 export class AppModule {}
