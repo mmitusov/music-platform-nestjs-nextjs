@@ -14,10 +14,12 @@ import { Module } from "@nestjs/common";
 import { TrackModule } from "./track/track.module";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from '@nestjs/config';
+import { FileModule } from "./file/file.module";
 
 @Module({
     imports: [
         TrackModule,
+        FileModule,
         ConfigModule.forRoot(),
         MongooseModule.forRoot(`mongodb+srv://Max:${process.env.MONGO_DB_PASSWORD}@music-platform.cyuu8cm.mongodb.net/?retryWrites=true&w=majority`)
     ]
