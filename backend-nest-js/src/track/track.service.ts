@@ -22,8 +22,9 @@ export class TrackService {
         return createdTrack;
     }
 
-    async getAll(): Promise<Track[]> {
-        const getAllTrack = await this.trackModel.find();
+    async getAll(count: number = 10, offset: number = 0): Promise<Track[]> {
+        //.skip(offset) - Чтобы пропустить уже просмотренные треки, а подгрузить только нужную партию, в количестве ".limit(count)"
+        const getAllTrack = await this.trackModel.find().skip(offset).limit(count); 
         return getAllTrack;
     }
 
@@ -43,5 +44,11 @@ export class TrackService {
         getOneTrack.comments.push(createdComment?._id as any);
         await getOneTrack.save();
         return createdComment;
+    }
+
+    async listen(id: ObjectId) {
+        const getOneTrack = await this.trackModel.findById(id);
+        getOneTrack.listened += 1;
+        await getOneTrack.save();
     }
 }
