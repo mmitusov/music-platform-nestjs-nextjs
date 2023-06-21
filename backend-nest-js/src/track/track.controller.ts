@@ -26,6 +26,11 @@ export class TrackController {
         return this.trackService.getAll(count, offset)
     }
 
+    @Get('/search') //!!!Если опустить этот запрос хоть немного ниже других запросов, то он не будет работать!!! Почему так - не знаю
+    searchTrack(@Query('query') query: string) {
+        return this.trackService.searchTrack(query)
+    }
+
     @Get(':trackId')
     getOne(@Param('trackId') id: ObjectId) { //ObjectId - type for TypeScript
         return this.trackService.getOne(id)
@@ -45,5 +50,6 @@ export class TrackController {
     addListened(@Param('trackId') id: ObjectId) {
         return this.trackService.listen(id)
     }
+
 
 }

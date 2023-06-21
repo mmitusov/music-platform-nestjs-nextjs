@@ -24,8 +24,8 @@ export class TrackService {
 
     async getAll(count: number = 10, offset: number = 0): Promise<Track[]> {
         //.skip(offset) - Чтобы пропустить уже просмотренные треки, а подгрузить только нужную партию, в количестве ".limit(count)"
-        const getAllTrack = await this.trackModel.find().skip(offset).limit(count); 
-        return getAllTrack;
+        const getAllTracks = await this.trackModel.find().skip(offset).limit(count); 
+        return getAllTracks;
     }
 
     async getOne(id: ObjectId): Promise<Track> { //ObjectId - type for TypeScript
@@ -50,5 +50,12 @@ export class TrackService {
         const getOneTrack = await this.trackModel.findById(id);
         getOneTrack.listened += 1;
         await getOneTrack.save();
+    }
+
+    async searchTrack(query: string): Promise<Track[]> {
+        const findTrack = await this.trackModel.find({
+            name: new RegExp(query, 'i') //Добавив 'i', поиск теперь будет выполняться без чувствительности к регистру (большая/маленькая буква)
+        });
+        return findTrack;
     }
 }
