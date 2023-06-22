@@ -27,7 +27,7 @@ export enum FileType {
 
 @Injectable()
 export class FileService {
-    createFile(type: FileType, file): string {
+    async createFile(type: FileType, file): Promise<string> {
         try { //Так как при записи файлов могут возникнуть ошибки - завернем все в try/catch
             const fileExtention = file.originalname.split('.').pop(); //.originalname - это метод из встроемной библиотеки 'multer'
             const fileName = uuid.v4() + '.' + fileExtention;
@@ -42,7 +42,17 @@ export class FileService {
         }
     }
     
-    removeFile(fileName: string) {
-
+    async removeFile(fileName: string) {
+        try {
+            const filePath = path.resolve(__dirname, '..', 'static');
+            fs.unlink(filePath + '/' + fileName, (err) => {
+                if (err) {
+                    throw err;
+                }
+            })
+            console.log('File removed!')
+        } catch(err) {
+            throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        }
     }
 }

@@ -16,8 +16,8 @@ export class TrackService {
     ) {}
 
     async create(createTrackDto: CreateTrackDto, picture, audio): Promise<Track> { //CreateTrackDto - type for TypeScript
-        const audioPath = this.fileService.createFile(FileType.audio, audio);
-        const picturePath = this.fileService.createFile(FileType.picture, picture);
+        const audioPath = await this.fileService.createFile(FileType.audio, audio);
+        const picturePath = await this.fileService.createFile(FileType.picture, picture);
         const createdTrack = await this.trackModel.create({...createTrackDto, listened: 0, picture: picturePath, audio: audioPath});
         return createdTrack;
     }
@@ -57,5 +57,15 @@ export class TrackService {
             name: new RegExp(query, 'i') //Добавив 'i', поиск теперь будет выполняться без чувствительности к регистру (большая/маленькая буква)
         });
         return findTrack;
+    }
+
+    //Удаляет медиа файлы на сервере и из выбранного трека. Напрмер если мы хотим их заменить на что-то другое 
+    async removeFile(trackId: string) {
+        const getOneTrack = await this.trackModel.findById(trackId);
+        await this.fileService.removeFile(getOneTrack.audio);
+        await this.fileService.removeFile(getOneTrack.picture);
+        getOneTrack.audio = '';
+        getOneTrack.picture = '';
+        await getOneTrack.save();
     }
 }
