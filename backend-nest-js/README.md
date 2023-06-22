@@ -5,6 +5,7 @@ nodemon: npm install --save-dev nodemon -> "dev": "nodemon -- src/main.ts"
 Max, M1kSJEdAfkTE6scP
 
 # Описание NestJS
+***Принцип работы NestJS***
 nest new . - for generating project localy
 
 Чтобы почитстить проэк и начать с нуля удалим все файлы из папки src. Также я не буду писать тесты, поэтому папку test также удалим.
@@ -42,6 +43,39 @@ P.S. Причем стоит заметить, то app.module.ts являетс
 ```
 
 Самый главный декоратор который используется внутри сервиса - это @Injectable(). Он как раз таки и помогает нам инжектировать созданный нами класс сервиса в другие части текущего модуля.
+
+***HTTP request decorators***
+When it comes to decorators like @Query, @Param, and @Body, they are typically used in the context of handling HTTP requests and extracting data from those requests. Let's explore the differences between these decorators:
+
+@Query: This decorator is used to extract query parameters from an HTTP request. Query parameters are key-value pairs added to the URL after a question mark (?). For example, in the URL /users?name=John&age=25, the query parameters are name and age. You can use the @Query decorator to access these values in your NestJS controller method.
+
+@Param: This decorator is used to extract route parameters from an HTTP request. Route parameters are dynamic parts of the URL that are defined in the route configuration. For example, in the URL /users/123, where 123 represents a user ID, you can use the @Param decorator to extract this value and use it in your controller method.
+
+@Body: This decorator is used to extract the request body from an HTTP request. The request body contains data that is sent by the client in the HTTP request payload, typically in JSON format. You can use the @Body decorator to access and deserialize the data sent by the client.
+
+To illustrate their usage, let's consider an example of a user controller:
+```
+import { Controller, Get, Post, Param, Query, Body } from '@nestjs/common';
+
+@Controller('users')
+export class UserController {
+  @Get(':id')
+  getUser(@Param('id') id: string) {
+    // Retrieves a user with the given ID
+  }
+
+  @Get()
+  getUsers(@Query('name') name: string, @Query('age') age: number) {
+    // Retrieves users based on the provided query parameters
+  }
+
+  @Post()
+  createUser(@Body() user: CreateUserDto) {
+    // Creates a new user using the provided data in the request body
+  }
+}
+
+```
 
 # Описание разработки проекта
 Основной функционал платформы будет включать в себя музыкальные альбомы, треки и коментарии пользователей. Логика креков и коментов бедет объеденена, так как выносить функционал коментов в отдельную логику нет смысла. Под альбомы сделаем БД но какую-то логику писать не будем (остается как ДЗ).
