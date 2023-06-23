@@ -1,0 +1,77 @@
+$bar-width: 30px;
+$bar-height: 5px;
+$gap: 4px;
+$bar-vertical-offset: $gap + $bar-height + $bar-height/2; //$bar-height/2 - берем во внимание ширину input
+$bar-background: #333;
+$animation-timing: 0.5s;
+
+.sideMenu {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 400px;
+    background-color: rgb(41, 112, 155);
+    translate: -100%;
+    transition: translate $animation-timing;
+    z-index: 1;
+}
+
+.hamburgerBtn:has(>input:checked) + .sideMenu { //Знак "+" означаем что мы вибираем имя класса который идет после hamburgerBtn класса
+    translate: 0;
+}
+
+.hamburgerBtn {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: $gap;
+    background-color: white;
+    cursor: pointer;
+    z-index: 10;
+
+    & > span, 
+    & > input {
+        content: '';
+        width: $bar-width;
+        height: $bar-height;
+        background-color: $bar-background;
+        border-radius: $bar-height;
+        transform-origin: center;
+        transition:
+            opacity $animation-timing,
+            width $animation-timing,
+            rotate $animation-timing,
+            translate $animation-timing;
+    }
+
+    & > input {
+        appearance: none; // Отключаем дефолтный вид input и превращем ее в обычный div
+        outline: none; // Отключаем outline когда мы наводимся на input через TAB
+        pointer-events: none; //Отключаем возможность кликать/взаимодействовать с input
+    }
+}
+
+
+.hamburgerBtn:has(>input:checked) {
+    input {
+        opacity: 0;
+        width: 0;
+    }
+    span {
+        &:nth-child(1) {
+            rotate: 45deg;
+            translate: 0px $bar-vertical-offset;
+        }
+        &:nth-child(3) {
+            rotate: -45deg;
+            translate: 0px $bar-vertical-offset*-1;
+        }
+    }
+}
