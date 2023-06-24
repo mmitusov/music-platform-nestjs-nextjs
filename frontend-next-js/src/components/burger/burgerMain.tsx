@@ -1,5 +1,8 @@
 import burgerMainStyles from '@/styles/burger/burgerMain.module.scss'
 import Link from 'next/link';
+import HomeIcon from '@mui/icons-material/Home';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 
 const BurgerMain = () => {
     return (
@@ -10,9 +13,18 @@ const BurgerMain = () => {
                 <span />
             </label>
             <div className={`${burgerMainStyles.sideMenu}`}>
-                <h1>Main</h1>
-                <h1><Link href="/tracks">Tracks</Link></h1>
-                <h1>Albums</h1>
+                <div>
+                    <HomeIcon color="primary" />
+                    <h1>Main</h1>
+                </div>
+                <div>
+                    <MusicNoteIcon color="primary" />
+                    <h1><Link href="/tracks">Tracks</Link></h1>
+                </div>
+                <div>
+                    <LibraryMusicIcon color="primary" />
+                    <h1>Albums</h1>
+                </div>
             </div>
         </>
     );
