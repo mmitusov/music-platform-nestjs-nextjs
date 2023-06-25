@@ -1,0 +1,58 @@
+.mainContainer {
+    padding-inline: 100px;
+
+    button {
+        padding: 10px;
+        margin-top: 20px;
+    }
+}
+
+.trackInfo {
+    display: flex;
+    margin-top: 30px;
+
+    & > span {
+        position: relative;
+        display: block;
+        width: 200px;
+        height: 200px;
+        & > img {
+            object-fit: cover;
+            overflow: hidden;
+            border: 1px solid black;
+        }
+    }
+    & > div {
+        margin-left: 50px;
+    }
+}
+
+.trackText {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    & > input {
+        color: black;
+        font-size: 16px;
+        opacity: 0.85;
+        border: 1px solid black;
+        outline: none;
+        padding: 10px;
+    }
+    
+    & > textarea {
+        color: black;
+        font-size: 16px;
+        opacity: 0.85;
+        border: 1px solid black;
+        outline: none;
+        padding: 10px;
+        resize: vertical;
+    }
+}
