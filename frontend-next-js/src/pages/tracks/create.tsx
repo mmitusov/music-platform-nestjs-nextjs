@@ -1,7 +1,9 @@
+import StepWrapper from "@/components/tracks/stepper/StepWrapper";
+
 const CreateTrack = () => {
     return (
         <div>
-            CreateTrack
+            <StepWrapper />
         </div>
     );
 }

@@ -1,4 +1,5 @@
 npm install --save-dev sass
+npm install react-stepper-horizontal
 npm install @mui/icons-material
 npm install @emotion/react
 npm install @emotion/core
@@ -20,8 +21,8 @@ To summarize, index.jsx represents the main content of a specific route, while _
 
 Далее начнем создавать остальные страница приложения:
     tracks/ - будет отображать список треков доступныхх к прослушиванию, а также ссылку на страницу для загрузки новых треков
-    tracks/create/ - для загрузки новых треков, будем переходить на эту страницу
     tracks/[id] - Динамический роутинг на конкретный трек. При нажатии на конкретный трек, нас будет переводить на эту страницу. Здесь будет отображена детальная информация о треке, а также будет возможность оставить коментарий под треком
+    tracks/create/ - логика по загрузке новых треков, будет находиться сдесь
 
 Также создадим папку typings, где мы будем хранить TypeScript типы.
 
@@ -30,3 +31,25 @@ To summarize, index.jsx represents the main content of a specific route, while _
 <div onClick={(e) => e.preventDefault()}> - предотвращает опрокидывание внешних событий на текущий компонент
 <div onClick={(e) => e.stopPropagation()}> - альтернативный вариант
 ```
+
+При начале работы с tracks/create/ - сперва создадим компонент который будет отвечать за отображение и подсвечивание текущего шага по загрузке трека. Для этого создадим новый компонент: StepWrapper. В веб разработке, компонет, который отвечает за функционал отображения пошагового прогресса, называют - Stepper. Мы не будем тратить время на то, чтобы создавать его вручную с нуля. А вместо этого воспользуемся библиотекой - react-stepper-horizontal. Однако react-stepper-horizontal не был создан под typescript, поэтому при его установки, вместе с установкой библиотеки не установились типы для нее. Скачть типы отдельно также не получиться, так как не сущействует отдельных типов под эту библиотеку. Поэтому `npm install @types/react-stepper-horizontal` не сработает. Единственнй выход, это либо воспользоваться другой библиотекой, либо модифицировать tsconfig.json. If you would like to disable it site wide you can instead edit tsconfig.json and add `"noImplicitAny": false`.
+
+This Stepper library lets you attach click handlers to each step. For example, the following setup helps you navigate between steps by clicking the completed steps:
+```
+const steps = [
+    { title: 'Track info', onClick: () => setActiveStep(0) },
+    { title: 'Add track picture', onClick: () => setActiveStep(1) },
+    { title: 'Add audio track', onClick: () => setActiveStep(2) },
+];
+```
+
+При желании в Stepper, мы можем указать кнопки "Next step" и "Previous step" приям под Stepper.
+```
+{activeStep !== 0 && <button onClick={() => setActiveStep(activeStep-1)}>Previous step</button>}
+{activeStep < steps.length-1 && <button onClick={() => setActiveStep(activeStep+1)}>Next step</button>}
+```
+
+Сам Stepper мы создали в StepWrapper.tsx компоненте.
+
+TypeScript doesn’t infer type for useState hook. So, what can we do? Well useState is actually a generic function that can have the type passed into it - const [activeStep, setActiveStep] = useState<number>(0).
+setActiveStep(prev => prev+1)
