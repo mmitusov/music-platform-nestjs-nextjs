@@ -1,0 +1,23 @@
+.trackPictureContainer {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 8px black;
+
+    button {
+        padding: 10px;
+    }
+}
+
+.navigationButtons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    & > button {
+        padding: 8px;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: rgb(185, 233, 249);
+        cursor: pointer;
+    }
+}

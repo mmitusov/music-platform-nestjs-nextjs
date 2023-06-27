@@ -1,4 +1,5 @@
 import Header from "./Header";
+import Player from "./player/Player";
 
 interface Props {
     children: React.ReactNode;
@@ -9,6 +10,7 @@ const Layout: React.FC<Props> = ({children}) => {
         <>
             <Header />
             {children}
+            <Player />
         </>
     );
 }

@@ -1,5 +1,6 @@
 npm install --save-dev sass
 npm install react-stepper-horizontal
+npm install @reduxjs/toolkit react-redux
 npm install @mui/icons-material
 npm install @emotion/react
 npm install @emotion/core
@@ -49,7 +50,29 @@ const steps = [
 {activeStep < steps.length-1 && <button onClick={() => setActiveStep(activeStep+1)}>Next step</button>}
 ```
 
-Сам Stepper мы создали в StepWrapper.tsx компоненте.
+Сам Stepper мы создали в StepWrapper.tsx компоненте. Внутри Stepper создадим компоненты как под ввод текста, так и под ввод картинок и аудио. При чем создавая ввод картинки/аудио, можно было воспользоваться 1-й из 2-х хитростей создания кастомного input:
+```
+const imgInput = useRef<HTMLInputElement>()
+<button onClick={() => imgInput.current?.click()}>
+    <input type='file' accept={'image/*'} ref={imgInput} hidden/>
+    Upload image
+</button>
+```
+Или
+```
+<button className={`${buttonAddFileStyle.addButton}`} type="button">
+    <input type="file" id="add-file-btn" onChange={handleFileChange} hidden />
+    <label htmlFor="add-file-btn">{fileName || 'Add file'}</label>
+</button>
+```
 
-TypeScript doesn’t infer type for useState hook. So, what can we do? Well useState is actually a generic function that can have the type passed into it - const [activeStep, setActiveStep] = useState<number>(0).
-setActiveStep(prev => prev+1)
+Далее создадим плеер, который будет отображаться в нижней части екрана. Компонент Player создадим в папке layout.
+
+Закончив с основной частью верстки, приступим к функциональной части приложения. И начнем с установки глабального стейет менеджера - Redux.
+
+!!!!!!!!!!!!!!!!!!
+activeTrack: (state, action: PayloadAction<Track>) => {
+      state.activeTrack = action.payload;
+      state.duration = 0;
+      state.currentTime = 0;
+    },

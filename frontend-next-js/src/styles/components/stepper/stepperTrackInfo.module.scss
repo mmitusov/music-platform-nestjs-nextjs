@@ -1,0 +1,43 @@
+.trackInfoContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 0 8px black;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    gap: 10px;
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        
+        & > input, textarea {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: black;
+            font-size: 16px;
+            opacity: 0.85;
+            outline: none;
+            padding: 10px;
+            resize: vertical;
+            border: 1px solid black;
+        }
+    }
+}
+
+.navigationButtons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    & > button {
+        padding: 8px;
+        border: 1px solid black;
+        border-radius: 5px;
+        background-color: rgb(185, 233, 249);
+        cursor: pointer;
+    }
+}
