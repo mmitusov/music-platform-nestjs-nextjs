@@ -76,3 +76,5 @@ activeTrack: (state, action: PayloadAction<Track>) => {
       state.duration = 0;
       state.currentTime = 0;
     },
+
+Затем создадим пару кастомных хуков, которые нам пригодяться в будущем. Для этого сперва создадим папку hooks. А внутри нее добавим следующие хуки:
