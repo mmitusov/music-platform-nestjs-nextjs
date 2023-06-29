@@ -11,7 +11,7 @@ const TrackProgress: React.FC<TrackProgressProps> = ({currPosition, fullLenght, 
         <div className={`${trackProgressStyles.trackProgressContainer}`}>
             <input 
                 type='range'
-                min={currPosition}
+                min={0}
                 max={fullLenght}
                 value={currPosition}
                 onChange={onChange}

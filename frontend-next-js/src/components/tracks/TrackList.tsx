@@ -5,13 +5,24 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Image from "next/image";
+import useGetAction from "@/hooks/useGetAction";
+import { useGetState } from "@/hooks/useGetState";
 
 interface TrackListProps {
     tracks: Track[]
 }
 
 const TrackList: React.FC<TrackListProps> = ({tracks}) => {
+    const { player } = useGetState();
+    const { setActiveTrack, setVolume, setDuration, setCurrentTime, setPause, setPlay } = useGetAction();
+
     const active = true;
+
+    //При нажатии на трек из списка мы записываем его в глоб хранилище как активный трек и начинаем его проигрывать
+    const play = (e, track) => {
+        e.preventDefault()
+        setActiveTrack(track)
+    }
 
     return (
         <div>
@@ -22,10 +33,10 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                         className={`${trackListStyles.trackItem}`} 
                         key={track._id}
                     >
-                        <div onClick={(e) => e.preventDefault()}>
-                            {active
-                                ? <PauseCircleIcon fontSize="large"/>
-                                : <PlayCircleIcon fontSize="large"/>
+                        <div onClick={(e) => play(e, track)}>
+                            {player.isPaused
+                                ? <PlayCircleIcon fontSize="large"/>
+                                : <PauseCircleIcon fontSize="large"/> 
                             }
                         </div>
                         <span>

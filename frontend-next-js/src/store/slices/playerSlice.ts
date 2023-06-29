@@ -12,7 +12,7 @@ export interface PlayerState {
 
 const initialState: PlayerState = {
   activeTrack: null,
-  volume: 0,
+  volume: 30,
   duration: 0,
   currentTime: 0,
   isPaused: true
@@ -22,7 +22,7 @@ export const playerSlice = createSlice({
   name: 'player',
   initialState,
   reducers: {
-    activeTrack: (state, action: PayloadAction<Track>) => {
+    setActiveTrack: (state, action: PayloadAction<Track>) => {
       state.activeTrack = action.payload;
       state.duration = 0;
       state.currentTime = 0;
@@ -30,17 +30,20 @@ export const playerSlice = createSlice({
     setVolume: (state, action: PayloadAction<number>) => {
       state.volume = action.payload;
     },
-    duration: (state, action: PayloadAction<number>) => {
+    setDuration: (state, action: PayloadAction<number>) => {
       state.duration = action.payload;
     },
-    currentTime: (state, action: PayloadAction<number>) => {
+    setCurrentTime: (state, action: PayloadAction<number>) => {
       state.currentTime = action.payload;
     },
-    pauseAndPlay: (state) => {
-      state.isPaused = !state.isPaused;
+    setPause: (state) => {
+      state.isPaused = true;
+    },
+    setPlay: (state) => {
+      state.isPaused = false;
     }
   },
 })
 
-export const { activeTrack, setVolume, duration, currentTime, pauseAndPlay} = playerSlice.actions
+export const { setActiveTrack, setVolume, setDuration, setCurrentTime, setPause, setPlay } = playerSlice.actions
 export default playerSlice.reducer
