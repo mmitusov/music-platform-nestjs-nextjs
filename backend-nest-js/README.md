@@ -2,8 +2,6 @@ Nest, Mongo
 
 nodemon: npm install --save-dev nodemon -> "dev": "nodemon -- src/main.ts"
 
-Max, M1kSJEdAfkTE6scP
-
 # Описание NestJS
 ***Принцип работы NestJS***
 nest new . - for generating project localy

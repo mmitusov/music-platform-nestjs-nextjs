@@ -26,7 +26,7 @@ const Player = () => {
 
     const setAudio = () => {
         if (player.activeTrack) {
-            audio.src = player.activeTrack?.audio;
+            audio.src = 'http://localhost:3000/' + player.activeTrack?.audio;
             audio.volume = player.volume / 100; //Чтобы при первом забуске приложения звук автоматически был на 30% громкости
             audio.onloadedmetadata = () => {
                 setDuration(Math.ceil(audio.duration))

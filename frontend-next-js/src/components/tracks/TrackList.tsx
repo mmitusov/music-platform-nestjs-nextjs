@@ -40,7 +40,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                             }
                         </div>
                         <span>
-                            <Image src={ track?.picture } alt='' fill/> 
+                            <Image src={ 'http://localhost:3000/' + track?.picture } alt='' fill/> 
                         </span>
                         <div className={`${trackListStyles.trackName}`}>
                             <h3>{track.name}</h3>

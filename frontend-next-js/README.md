@@ -1,6 +1,7 @@
 npm install --save-dev sass
 npm install react-stepper-horizontal
 npm install @reduxjs/toolkit react-redux
+npm install axios
 npm install @mui/icons-material
 npm install @emotion/react
 npm install @emotion/core
@@ -105,4 +106,10 @@ if (!player.activeTrack) {
 }
 ```
 
-Далее реализуем клиент серверную составляющею и будем получать наши треки с сервера.
+Далее реализуем клиент серверную составляющею и будем получать наши треки с сервера. Так как в Player.tsx у нас храниться состояние только одного трека, то мы создадим отдельный слайс для хранения перечня всех треков что мы получаем с бекенда - tracksSlice.ts.
+
+extraReducers
+По классике, для получения каких-то данных с бека, мы используем асинхронные екшены которые создаются при помощи мидлваре редаксСанк
+ОШИБКИ!!! TypeError: Cannot read properties of undefined (reading 'getState')
+
+<Image src={ 'http://localhost:3000/' + track?.picture } alt='' fill/> 
