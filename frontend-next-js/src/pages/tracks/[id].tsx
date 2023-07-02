@@ -2,13 +2,32 @@ import { Track } from "@/typings/tracks";
 import trackInfoStyles from '@/styles/pages/trackInfoStyles.module.scss'
 import Link from "next/link";
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 const DynamicTrackId = () => {
+    const [track, setTrack] = useState<Track | null>(null)
     const userName = useRef(null);
     const userComment = useRef(null);
 
-    const tracks: Track = {_id: '1', name: 'Name', artist: 'Artist', text: 'Text', listened: 1, picture: 'https://img.freepik.com/free-vector/musical-pentagram-sound-waves-notes-background_1017-33911.jpg?w=2000&t=st=1687600589~exp=1687601189~hmac=fde81f2d1af731b995ceafe98e1298175b1a37233df0037bf403e7041a405585', audio: '', comments: []}
+    const router = useRouter();
+    const { id } = router.query;
+
+    useEffect(() => {
+        (async () => {
+            try {
+                if(id) {
+                    const response = await axios.get<Track>(process.env.NEXT_PUBLIC_BACKEND_URL_TRACKS + id);
+                    const data = await response.data;
+                    setTrack(data)
+                }
+            } catch(err) {
+                console.log(err)
+                throw new Error('Wrong track ID!');
+            }
+        })()
+    }, [id])
 
     const sendComment = () => {
         console.log(userName.current.value);
@@ -23,6 +42,12 @@ const DynamicTrackId = () => {
         }
     };
 
+    if (!track) {
+        return (
+            <h1>Loading...</h1>
+        )
+    }
+
     return (
         <div className={`${trackInfoStyles.mainContainer}`}>
             <Link href="/tracks">
@@ -31,18 +56,18 @@ const DynamicTrackId = () => {
 
             <div className={`${trackInfoStyles.trackInfo}`}>
                 <span>
-                    <Image src={tracks.picture} alt='' fill/>
+                    <Image src={ process.env.NEXT_PUBLIC_BACKEND_URL + track?.picture } alt='' fill/>
                 </span>
                 <div>
-                    <h1>Track name - {tracks.name}</h1>
-                    <h1>Artist - {tracks.artist}</h1>
-                    <h1>Listened - {tracks.listened} times</h1>
+                    <h1>Track name - {track.name}</h1>
+                    <h1>Artist - {track.artist}</h1>
+                    <h1>Listened - {track.listened} times</h1>
                 </div>
             </div>
 
             <div className={`${trackInfoStyles.trackText}`}>
                 <h1>Lyrics</h1>
-                <p>{tracks.text}</p>                
+                <p>{track.text}</p>                
             </div>
 
             <h1>Comment section</h1>
@@ -63,7 +88,7 @@ const DynamicTrackId = () => {
                 Send comment
             </button>
 
-            {tracks.comments.map(comment => 
+            {track.comments.map(comment => 
                 <div>
                     <div>User</div>
                     <div>Comment</div>
