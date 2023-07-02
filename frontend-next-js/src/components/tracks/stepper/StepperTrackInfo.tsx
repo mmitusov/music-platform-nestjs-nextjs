@@ -1,37 +1,42 @@
 import trackInfoStyes from '@/styles/components/stepper/stepperTrackInfo.module.scss'
 import { useState } from 'react';
 
-const StepperTrackInfo = ({activeStep, setActiveStep}) => {
-    const [ data, setData ] = useState<{trackName: string, artistName: string, trackLyrics: string} | {}>({});
+const StepperTrackInfo = ({activeStep, setActiveStep, setOverallInput}) => {
+    const [ infoInput, setInfoInput ] = useState<{trackName?: string, artistName?: string, trackLyrics?: string}>({});
 
-    const onChangeFieldHandler = ( event ) => {
-        setData( prev => ({ ...prev, [ event.target.id ]: event.target.value  }) );
-        console.log(data, isFormFinished)
+    const onChangeFieldHandler = ( e ) => {
+        setInfoInput( prev => ({ ...prev, [ e.target.id ]: e.target.value}) );
+        setOverallInput( prev => ({ ...prev, [ e.target.id ]: e.target.value}) );
     }
 
-    const handleKeypress = (e: any) => {
-        if (e.keyCode === 13) {
-            // sendForm();
-        }
-    };
-
     const isFormFinished =
-        data?.trackName?.length > 0 &&
-        data?.artistName?.length > 0 &&
-        data?.trackLyrics?.length > 0;
+        infoInput?.trackName?.length > 0 &&
+        infoInput?.artistName?.length > 0 &&
+        infoInput?.trackLyrics?.length > 0;
 
     return (
         <div className={`${trackInfoStyes.trackInfoContainer}`}>
-            
             <div>
                 <form className={`${trackInfoStyes.form}`}>
                     <div>
                         <label>Track name</label>
-                        <input type='text' id="trackName" onChange={ onChangeFieldHandler } placeholder="Enter track name..." required/>
+                        <input 
+                            id="trackName" 
+                            type='text' 
+                            onChange={ onChangeFieldHandler } 
+                            placeholder="Enter track name..." 
+                            required
+                        />
                     </div>
                     <div>
                         <label>Artist name</label>
-                        <input type='text' id="artistName" onChange={ onChangeFieldHandler } placeholder="Enter artist name..." required/>
+                        <input 
+                            id="artistName" 
+                            type='text' 
+                            onChange={ onChangeFieldHandler } 
+                            placeholder="Enter artist name..." 
+                            required
+                        />
                     </div>
                     <div >
                         <label>Song lyrics</label>

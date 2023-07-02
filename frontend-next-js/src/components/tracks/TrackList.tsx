@@ -14,7 +14,7 @@ interface TrackListProps {
 
 const TrackList: React.FC<TrackListProps> = ({tracks}) => {
     const { player } = useGetState();
-    const { setActiveTrack, setVolume, setDuration, setCurrentTime, setPause, setPlay } = useGetAction();
+    const { setActiveTrack } = useGetAction();
 
     const active = true;
 
@@ -40,7 +40,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                             }
                         </div>
                         <span>
-                            <Image src={ 'http://localhost:3000/' + track?.picture } alt='' fill/> 
+                            <Image src={ process.env.NEXT_PUBLIC_BACKEND_URL + track?.picture } alt='' fill/> 
                         </span>
                         <div className={`${trackListStyles.trackName}`}>
                             <h3>{track.name}</h3>

@@ -18,10 +18,8 @@ export const fetchTracks = createAsyncThunk( //Експортируем, так 
   'tracksList/fetchTracks', // Action type - нужен для типизации. Состоит из = name: 'tracksList', + созданная fetchTracks функция
   async () => {
     try {
-      const response = await axios.get<Track[]>('http://localhost:3000/tracks/');
+      const response = await axios.get<Track[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL_TRACKS}`);
       const data = await response.data;
-      console.log(data)
-      console.log('asdasdasdadasdads')
       return data;
     } catch (error) {
       throw new Error('Failed to fetch tracks');
@@ -34,7 +32,8 @@ export const tracksListSlice = createSlice({
   initialState,
 
   reducers: {
-    // Obj для обычных редюсеров, если таковые имеются
+    // Obj для обычных редюсеров, если таковые нужны/имеются
+    // Можно это поле удалить. Оставил для наглядности
   },
 
   extraReducers(builder) {
@@ -54,5 +53,4 @@ export const tracksListSlice = createSlice({
   }
 })
 
-// export const tracksListActions = {...tracksListSlice.actions, fetchTracks}}
 export default tracksListSlice.reducer
