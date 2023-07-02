@@ -42,7 +42,7 @@ const DynamicTrackId = () => {
         }
     };
 
-    if (!track) {
+    if (!track || !Array.isArray(track.comments)) {
         return (
             <h1>Loading...</h1>
         )

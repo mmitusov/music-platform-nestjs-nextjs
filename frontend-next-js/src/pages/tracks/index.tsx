@@ -6,15 +6,15 @@ import { useGetState } from '@/hooks/useGetState';
 import useGetAction from '@/hooks/useGetAction';
 
 const Tracks = () => {
-    const { tracksList } = useGetState();
+    const { tracksListState } = useGetState();
     const { fetchTracks } = useGetAction();
     useEffect(() => {
         fetchTracks()
     }, [])
 
-    if (tracksList.fetchErr) {
+    if (tracksListState.fetchErr) {
         return 
-            <h1>{tracksList.fetchErr}</h1>
+            <h1>{tracksListState.fetchErr}</h1>
     }
 
     return (
@@ -24,7 +24,7 @@ const Tracks = () => {
                     <h1>Track List</h1>
                     <p><Link href="/tracks/create">Upload</Link></p>
                 </div>
-                <TrackList tracks={tracksList.tracksList}/>
+                <TrackList tracks={tracksListState.tracksList}/>
             </div>
         </div>
     );

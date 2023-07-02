@@ -13,7 +13,7 @@ interface TrackListProps {
 }
 
 const TrackList: React.FC<TrackListProps> = ({tracks}) => {
-    const { player } = useGetState();
+    const { playerState } = useGetState();
     const { setActiveTrack } = useGetAction();
 
     const active = true;
@@ -22,6 +22,12 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
     const play = (e, track) => {
         e.preventDefault()
         setActiveTrack(track)
+    }
+
+    if (!tracks.length || !Array.isArray(tracks)) {
+        return (
+            <h1>Loading...</h1>
+        )
     }
 
     return (
@@ -34,13 +40,17 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                         key={track._id}
                     >
                         <div onClick={(e) => play(e, track)}>
-                            {player.isPaused
+                            {playerState.isPaused
                                 ? <PlayCircleIcon fontSize="large"/>
                                 : <PauseCircleIcon fontSize="large"/> 
                             }
                         </div>
                         <span>
-                            <Image src={ process.env.NEXT_PUBLIC_BACKEND_URL + track?.picture } alt='' fill/> 
+                            <Image 
+                                src={ process.env.NEXT_PUBLIC_BACKEND_URL + track?.picture } 
+                                alt=''
+                                fill
+                            /> 
                         </span>
                         <div className={`${trackListStyles.trackName}`}>
                             <h3>{track.name}</h3>

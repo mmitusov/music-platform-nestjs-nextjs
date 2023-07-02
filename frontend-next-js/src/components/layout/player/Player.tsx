@@ -11,8 +11,8 @@ import { useEffect } from 'react';
 let audio;
 
 const Player = () => {    
-    const { player } = useGetState();
-    const { setActiveTrack, setVolume, setDuration, setCurrentTime, setPause, setPlay } = useGetAction();
+    const { playerState } = useGetState();
+    const { setVolume, setDuration, setCurrentTime, setPause, setPlay } = useGetAction();
     useEffect(() => {
         if(!audio) {
             audio = new Audio()
@@ -20,12 +20,12 @@ const Player = () => {
             setAudio(); 
             play();
         }
-    }, [player.activeTrack])
+    }, [playerState.activeTrack])
 
     const setAudio = () => {
-        if (player.activeTrack) {
-            audio.src = process.env.NEXT_PUBLIC_BACKEND_URL + player.activeTrack?.audio;
-            audio.volume = player.volume / 100; //Чтобы при первом забуске приложения звук автоматически был на 30% громкости
+        if (playerState.activeTrack) {
+            audio.src = process.env.NEXT_PUBLIC_BACKEND_URL + playerState.activeTrack?.audio;
+            audio.volume = playerState.volume / 100; //Чтобы при первом забуске приложения звук автоматически был на 30% громкости
             audio.onloadedmetadata = () => {
                 setDuration(Math.ceil(audio.duration))
             }
@@ -36,7 +36,7 @@ const Player = () => {
     }
 
     const play = () => {
-        if (player.isPaused) {
+        if (playerState.isPaused) {
             setPlay()
             audio.play()
         } else {
@@ -56,7 +56,7 @@ const Player = () => {
         //На изменение audio.currentTime срабатывает - audio.ontimeupdate и начинает играть с текущего заданого времени
     }
     
-    if (!player.activeTrack) {
+    if (!playerState.activeTrack) {
         return null
     }
 
@@ -64,21 +64,21 @@ const Player = () => {
         <div>
             <div className={`${playerStyles.playerContainer}`}>
                 <div onClick={play}>
-                    {player.isPaused
+                    {playerState.isPaused
                         ? <PlayCircleIcon fontSize="large"/>
                         : <PauseCircleIcon fontSize="large"/>
                     }
                 </div>
                 <div className={`${playerStyles.track}`}>
-                    <h3>{player.activeTrack.name}</h3>
-                    <h4>{player.activeTrack.artist}</h4>
+                    <h3>{playerState.activeTrack.name}</h3>
+                    <h4>{playerState.activeTrack.artist}</h4>
                 </div>
 
-                <TrackProgress currPosition={player.currentTime} fullLenght={player.duration} onChange={trackScroll}/>
+                <TrackProgress currPosition={playerState.currentTime} fullLenght={playerState.duration} onChange={trackScroll}/>
 
                 <div className={`${playerStyles.volume}`}>
                     <VolumeMuteIcon />
-                    <TrackProgress currPosition={player.volume} fullLenght={100} onChange={changeVolume}/>
+                    <TrackProgress currPosition={playerState.volume} fullLenght={100} onChange={changeVolume}/>
                     <VolumeUpIcon />
                 </div>
             </div>
