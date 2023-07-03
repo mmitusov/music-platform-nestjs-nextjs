@@ -7,6 +7,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Image from "next/image";
 import useGetAction from "@/hooks/useGetAction";
 import { useGetState } from "@/hooks/useGetState";
+import { useState } from "react";
 
 interface TrackListProps {
     tracks: Track[]
@@ -14,14 +15,19 @@ interface TrackListProps {
 
 const TrackList: React.FC<TrackListProps> = ({tracks}) => {
     const { playerState } = useGetState();
-    const { setActiveTrack } = useGetAction();
-
-    const active = true;
+    const { setActiveTrack, setPause, setPlay } = useGetAction();
+    const [playedId, setPlayedId] = useState('')
 
     //При нажатии на трек из списка мы записываем его в глоб хранилище как активный трек и начинаем его проигрывать
-    const play = (e, track) => {
+    const play = (e, track, trackId) => {
         e.preventDefault()
-        setActiveTrack(track)
+
+        //Перезаписываем и запускаем трек, только когда мы выбрали новую дорожку для воспроизведения
+        if (playedId !== trackId) {
+            setActiveTrack(track)
+            setPause()
+            setPlayedId(trackId)
+        }
     }
 
     if (!tracks.length || !Array.isArray(tracks)) {
@@ -39,10 +45,13 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                         className={`${trackListStyles.trackItem}`} 
                         key={track._id}
                     >
-                        <div onClick={(e) => play(e, track)}>
-                            {playerState.isPaused
-                                ? <PlayCircleIcon fontSize="large"/>
-                                : <PauseCircleIcon fontSize="large"/> 
+                        <div onClick={(e) => play(e, track, track._id)}>
+                            {
+                                playerState.isPaused && <PlayCircleIcon fontSize="large"/>
+                                ||
+                                playerState.activeTrack?._id!==track._id && !playerState.isPaused && <PlayCircleIcon fontSize="large"/>
+                                ||
+                                playerState.activeTrack?._id===track._id && !playerState.isPaused && <PauseCircleIcon fontSize="large"/>
                             }
                         </div>
                         <span>
@@ -56,7 +65,6 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                             <h3>{track.name}</h3>
                             <h4>{track.artist}</h4>
                         </div>
-                        {active && <p>1.10 / 3.30</p>}
                         <div className={`${trackListStyles.deleteIcon}`} onClick={(e) => e.stopPropagation()}>
                             <DeleteForeverIcon fontSize="large" />
                         </div>

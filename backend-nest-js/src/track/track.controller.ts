@@ -26,6 +26,7 @@ export class TrackController {
         return this.trackService.getAll(count, offset)
     }
 
+    //http://localhost:3000/tracks/search/?query=trackName
     @Get('/search') //!!!Если опустить этот запрос хоть немного ниже других запросов, то он не будет работать!!! Почему так - не знаю
     searchTrack(@Query('query') query: string) {
         return this.trackService.searchTrack(query)

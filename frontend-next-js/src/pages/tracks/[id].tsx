@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Head from "next/head";
 
 const DynamicTrackId = () => {
     const [track, setTrack] = useState<Track | null>(null)
@@ -29,9 +30,17 @@ const DynamicTrackId = () => {
         })()
     }, [id])
 
-    const sendComment = () => {
-        console.log(userName.current.value);
-        console.log(userComment.current.value);
+    const sendComment = async () => {
+        try {
+            const response = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL_COMMENT, {
+                username: userName.current.value,
+                text: userComment.current.value,
+                trackId: id
+            })
+            setTrack({...track, comments: [...track?.comments, response.data]})
+        } catch(err) {
+            console.log(err);
+        }
         userName.current.value = '';
         userComment.current.value = '';
     }
@@ -50,6 +59,14 @@ const DynamicTrackId = () => {
 
     return (
         <div className={`${trackInfoStyles.mainContainer}`}>
+            <Head>
+                <title>{'Music platform: ' + track.artist + ' - ' + track.name}</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="description" content="Welcome to the best Music platform"/>
+                <meta name="robots" content="index, follow" />
+                <link rel="icon" href="/next.svg"/>
+            </Head>
+
             <Link href="/tracks">
                 <button>Back to the list</button>
             </Link>
@@ -89,9 +106,9 @@ const DynamicTrackId = () => {
             </button>
 
             {track.comments.map(comment => 
-                <div>
-                    <div>User</div>
-                    <div>Comment</div>
+                <div key={comment._id}>
+                    <div>{comment.username}</div>
+                    <div>{comment.text}</div>
                 </div>
             )}
         </div>
