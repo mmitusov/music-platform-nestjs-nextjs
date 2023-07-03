@@ -1,5 +1,7 @@
-Nest, Mongo 
-
+Nest 
+npm i @nestjs/mongoose mongoose
+npm i uuid
+npm i nodemon
 nodemon: npm install --save-dev nodemon -> "dev": "nodemon -- src/main.ts"
 
 # Описание NestJS
