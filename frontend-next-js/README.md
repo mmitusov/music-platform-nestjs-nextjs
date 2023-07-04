@@ -136,6 +136,8 @@ P.S. Создав асинхронный екшен, лучне перезагр
 
 Следующая фитча которую мы добавим - это возможность поиска треков по названию. Для этого создадим еще один асинхронный экшн fetchSearchedTracks в tracksListSlice.ts. И добавим поле вводо над списком треков.
 
+deleteOneTrack
+
 TypeError: map() is not a function in React
 Array.isArray(tracks) && tracks.map((track) => 
 

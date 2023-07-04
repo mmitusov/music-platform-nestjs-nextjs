@@ -15,7 +15,7 @@ interface TrackListProps {
 
 const TrackList: React.FC<TrackListProps> = ({tracks}) => {
     const { playerState } = useGetState();
-    const { setActiveTrack, setPause, setPlay } = useGetAction();
+    const { setActiveTrack, setPause, deleteOneTrack } = useGetAction();
     const [playedId, setPlayedId] = useState('')
 
     //При нажатии на трек из списка мы записываем его в глоб хранилище как активный трек и начинаем его проигрывать
@@ -28,6 +28,11 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
             setPause()
             setPlayedId(trackId)
         }
+    }
+
+    const deleteTrack = (e, trackId) => {
+        e.preventDefault()
+        deleteOneTrack({trackId})
     }
 
     if (!tracks.length || !Array.isArray(tracks)) {
@@ -65,7 +70,7 @@ const TrackList: React.FC<TrackListProps> = ({tracks}) => {
                             <h3>{track.name}</h3>
                             <h4>{track.artist}</h4>
                         </div>
-                        <div className={`${trackListStyles.deleteIcon}`} onClick={(e) => e.stopPropagation()}>
+                        <div className={`${trackListStyles.deleteIcon}`} onClick={(e) => deleteTrack(e, track._id)}>
                             <DeleteForeverIcon fontSize="large" />
                         </div>
                     </Link>

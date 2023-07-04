@@ -6,6 +6,10 @@ interface trackName {
   trackName: string;
 }
 
+interface trackId {
+  trackId: string;
+}
+
 export interface tracksState {
   tracksList: Track[];
   isLoading: boolean;
@@ -45,6 +49,19 @@ export const fetchSearchedTracks = createAsyncThunk( //Експортируем,
   }
 )
 
+export const deleteOneTrack = createAsyncThunk( //Експортируем, так как мы будем использовать его как екшен
+  'tracksList/deleteOneTrack', // Action type - нужен для типизации. Состоит из = name: 'tracksList', + созданная fetchTracks функция
+  async (query: trackId) => {
+    try {
+      const {trackId} = query;
+      await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL_DELETE_TRACK + trackId}`);
+      return trackId
+    } catch (error) {
+      throw new Error('Failed to delete track and corresponding comments');
+    }
+  }
+)
+
 export const tracksListSlice = createSlice({
   name: 'tracksList',
   initialState,
@@ -68,16 +85,35 @@ export const tracksListSlice = createSlice({
         state.isLoading = false;
         state.fetchErr = action.error.message || 'Unknown Error occurred';
       }),
+
     builder
-      .addCase(fetchSearchedTracks.pending, (state) => { //Передаем fetchTracks = createAsyncThunk(), как - fetchTracks.pending
+      .addCase(fetchSearchedTracks.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchSearchedTracks.fulfilled, (state, action)=> { //Передаем fetchTracks = createAsyncThunk(), как - fetchTracks.pending
+      .addCase(fetchSearchedTracks.fulfilled, (state, action)=> {
         state.isLoading = false;
         state.fetchErr = '';
         state.tracksList = action.payload;
       })
-      .addCase(fetchSearchedTracks.rejected, (state, action) => { //Передаем fetchTracks = createAsyncThunk(), как - fetchTracks.pending
+      .addCase(fetchSearchedTracks.rejected, (state, action) => {
+        state.isLoading = false;
+        state.fetchErr = action.error.message || 'Unknown Error occurred';
+      }),
+      
+    builder
+      .addCase(deleteOneTrack.pending, (state) => {
+        state.isLoading = true;
+      })
+      //Find index of removed track and delete it from state.tracksList
+      .addCase(deleteOneTrack.fulfilled, (state, action)=> {
+        state.isLoading = false;
+        state.fetchErr = '';
+        const newArr = state.tracksList.filter(track => {
+          return track._id !== action.payload;
+        });
+        state.tracksList = [...newArr];
+      })
+      .addCase(deleteOneTrack.rejected, (state, action) => {
         state.isLoading = false;
         state.fetchErr = action.error.message || 'Unknown Error occurred';
       })
