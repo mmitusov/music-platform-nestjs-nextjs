@@ -33,11 +33,6 @@ export class TrackService {
         return getOneTrack;
     }
 
-    async delete(id: ObjectId): Promise<Types.ObjectId> {
-        const trackBeforeDelete = await this.trackModel.findByIdAndDelete(id);
-        return trackBeforeDelete?._id;
-    }
-
     async addComment(addCommentDto: AddCommentDto): Promise<Comment> {
         const getOneTrack = await this.trackModel.findById(addCommentDto.trackId);
         const createdComment = await this.commentModel.create({...addCommentDto});
@@ -68,4 +63,18 @@ export class TrackService {
         getOneTrack.picture = '';
         await getOneTrack.save();
     }
+
+    //Удаляем трек, так же все связанные с ним _id на коментарии, что храняться в - $in: deletedTrack.comments
+    //Также удаляем аудио файлы и обложки
+    async deleteTrack(trackId: string) {
+        const deletedTrack = await this.trackModel.findByIdAndDelete(trackId);
+        await this.commentModel.deleteMany({ _id: { $in: deletedTrack.comments } });
+        await this.fileService.removeFile(deletedTrack.audio);
+        await this.fileService.removeFile(deletedTrack.picture);
+    }
+
+    // async delete(id: ObjectId): Promise<Types.ObjectId> {
+    //     const trackBeforeDelete = await this.trackModel.findByIdAndDelete(id);
+    //     return trackBeforeDelete?._id;
+    // }
 }

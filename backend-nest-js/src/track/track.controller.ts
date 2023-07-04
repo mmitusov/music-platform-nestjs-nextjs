@@ -39,16 +39,23 @@ export class TrackController {
     
     //http://localhost:3000/tracks/removeFile/:?trackId=6493f441dc5d3158a835484b
     //Удаляет медиа файлы на сервере и из выбранного трека. Напрмер если мы хотим их заменить на что-то другое 
-    @Delete('/removeFile/:trackId')
+    @Delete('/removeMedia/:trackId')
     removeFile(@Query('trackId') trackId: string) {
         return this.trackService.removeFile(trackId)
     }
 
-    //http://localhost:3000/tracks/6493f441dc5d3158a835484b
-    @Delete(':trackId')
-    delete(@Param('trackId') id: ObjectId) {
-        return this.trackService.delete(id)
+    //http://localhost:3000/tracks/deleteTrack/?trackId=6493f441dc5d3158a835484b
+    //Удаляет трек целиком и связанные с ним коментарии
+    @Delete('/deleteTrack')
+    deleteTrack(@Query('trackId') trackId: string) {
+        return this.trackService.deleteTrack(trackId)
     }
+
+    // //http://localhost:3000/tracks/6493f441dc5d3158a835484b
+    // @Delete(':trackId')
+    // delete(@Param('trackId') id: ObjectId) {
+    //     return this.trackService.delete(id)
+    // }
 
     @Post('/comment')
     addComment(@Body() addCommentDto: AddCommentDto) {

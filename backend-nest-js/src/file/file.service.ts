@@ -50,7 +50,6 @@ export class FileService {
                     throw err;
                 }
             })
-            console.log('File removed!')
         } catch(err) {
             throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
         }
