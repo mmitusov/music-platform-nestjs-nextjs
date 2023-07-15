@@ -8,6 +8,28 @@
     }
 }
 
+.uploadPicture{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
+
+    & > span {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        margin-inline: 10px;
+        & > img {
+            object-fit: cover;
+            overflow: hidden;
+        }
+    }
+
+    & > button {
+        height: 100%;
+    }
+}
+
 .navigationButtons {
     display: flex;
     justify-content: center;
