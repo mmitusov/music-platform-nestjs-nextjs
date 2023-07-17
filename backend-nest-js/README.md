@@ -49,6 +49,8 @@ P.S. Причем стоит заметить, то app.module.ts являетс
 2. Добавить сервис в родительский модуль, в поле - exports: []
 3. Добавить модуль с нашим сервисом в импорты самого корневого модуля нашего приложения
 
+Когда мы обработали входной запрос на сервере и собирвемся отправить ответ на клиент, то мы можем кастомно задавать статус нашему ответу при помощи - @HttpCode(). Напрмиер: @HttpCode(200) или @HttpCode(HttpStatus.OK). Это равноценные примеры.
+
 ***HTTP request decorators***
 When it comes to decorators like @Query, @Param, and @Body, they are typically used in the context of handling HTTP requests and extracting data from those requests. Let's explore the differences between these decorators:
 
